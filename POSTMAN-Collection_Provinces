@@ -1,0 +1,162 @@
+{
+	"info": {
+		"_postman_id": "6250f678-97c1-444a-9da5-3128e86a3e87",
+		"name": "Provinces",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Todas las provincias",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/province",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"province"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Provincia especifica",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/province/4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"province",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Nueva provincia",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/province?name=San Juan&fullName=Provincia de San Juan&latitude=-31.5375&longitude=-68.5364&displayOrder=dfg",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"province"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "San Juan"
+						},
+						{
+							"key": "fullName",
+							"value": "Provincia de San Juan"
+						},
+						{
+							"key": "latitude",
+							"value": "-31.5375"
+						},
+						{
+							"key": "longitude",
+							"value": "-68.5364"
+						},
+						{
+							"key": "displayOrder",
+							"value": "dfg"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reemplazar provincia",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/province?name=San Juan&fullName=Provincia de San Juan&id=4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"province"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "San Juan"
+						},
+						{
+							"key": "fullName",
+							"value": "Provincia de San Juan"
+						},
+						{
+							"key": "latitude",
+							"value": "-31.5375",
+							"disabled": true
+						},
+						{
+							"key": "longitude",
+							"value": "-68.5364",
+							"disabled": true
+						},
+						{
+							"key": "displayOrder",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/province/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"province",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
