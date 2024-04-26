@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "http-status-codes": "^2.3.0",
+    "nodemon": "^3.1.0",
+    "pg": "^8.11.5"
+  },
+  "name": "provincias_node",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Valenkra/Provincias_NODE.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Valenkra/Provincias_NODE/issues"
+  },
+  "homepage": "https://github.com/Valenkra/Provincias_NODE#readme",
+  "description": ""
+}
