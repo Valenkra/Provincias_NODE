@@ -25,6 +25,7 @@ const ProvinceReouter = () =>
     //1 TERMINADO
     router.get("/api/province", (req, res) => {
         res.status(200).send(provincias);
+        next();
     });
 
     //2 TERMINADO
@@ -32,9 +33,9 @@ const ProvinceReouter = () =>
         let id = req.params.id;
         if(validacionesHelper.getIntegerOrDefault(id, -1) != -1) {
             let i = provincias.findIndex(p => p.id == id);
-            if(i != -1) return res.status(200).send(provincias[i]);
-            else return res.status(400).send("No se encontró la provincia.");
-        }else return res.status(400).send("Los parametros no son validos.");
+            if(i != -1) { next(); return res.status(200).send(provincias[i]); }
+            else {next(); return res.status(400).send("No se encontró la provincia.");}
+        }else {next(); return res.status(400).send("Los parametros no son validos.");}
     });
 
 
