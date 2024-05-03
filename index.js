@@ -13,7 +13,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/province", ProvinceRouter);
-app.use("/api/province/:id", ProvinceRouter);
 
 app.listen(port, () => {
     console.log("listoo");

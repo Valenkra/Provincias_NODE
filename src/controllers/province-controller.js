@@ -20,27 +20,24 @@ provincias.push(new Province(9, "Jujuy", "Provincia de Jujuy", -24.1858, -65.299
 let cantId = provincias.length;
 
 
-const ProvinceReouter = () =>
-{
     //1 TERMINADO
-    router.get("/api/province", (req, res) => {
+    router.get("", (req, res) => {
         res.status(200).send(provincias);
-        next();
     });
 
     //2 TERMINADO
-    router.get("/api/province/:id", (req, res) => {
+    router.get(":id", (req, res) => {
         let id = req.params.id;
         if(validacionesHelper.getIntegerOrDefault(id, -1) != -1) {
             let i = provincias.findIndex(p => p.id == id);
-            if(i != -1) { next(); return res.status(200).send(provincias[i]); }
-            else {next(); return res.status(400).send("No se encontró la provincia.");}
-        }else {next(); return res.status(400).send("Los parametros no son validos.");}
+            if(i != -1) { return res.status(200).send(provincias[i]); }
+            else {return res.status(400).send("No se encontró la provincia.");}
+        }else {return res.status(400).send("Los parametros no son validos.");}
     });
 
 
     //3 TERMINADO
-    router.post("/api/province", (req, res) => {
+    router.post("", (req, res) => {
         let name = req.query.name;
         let fullName = req.query.fullName;
         let latitude = req.query.latitude;
@@ -62,7 +59,7 @@ const ProvinceReouter = () =>
     });
 
     //4 TERMINADO
-    router.put("/api/province", (req, res) => {
+    router.put("", (req, res) => {
         let id = req.query.id;
         let name = req.query.name;
         let fullName = req.query.fullName;
@@ -87,7 +84,7 @@ const ProvinceReouter = () =>
     });
 
     //5 TERMINADO
-    router.delete("/api/province/:id", (req, res) => {
+    router.delete(":id", (req, res) => {
         let id = req.params.id;
         if(validacionesHelper.getIntegerOrDefault(id, -1) != -1) {
             let i = provincias.findIndex(p => p.id == id);
@@ -98,6 +95,5 @@ const ProvinceReouter = () =>
             else return res.status(400).send("No se encontró la provincia.");
         }else return res.status(400).send("Los parametros no son validos.");
     });
-}
 
-export default ProvinceReouter;
+export default router;
