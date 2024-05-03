@@ -12,6 +12,7 @@ app.get("/", (req, res) => {
     res.status(200).send('¡Ya estoy respondiendo!');
 });
 
+// Eventos
 app.use("/api/province", ProvinceRouter);
 
 app.listen(port, () => {
