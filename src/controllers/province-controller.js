@@ -1,21 +1,9 @@
 import {Router} from 'express';
 // import ProvinceService from './../services/province-service.js'
-import Province from "./src/entities/province.js";
-import validacionesHelper from "./src/helpers/validaciones-helper.js";
+import Province from "../entities/province.js";
+import validacionesHelper from "../helpers/validaciones-helper.js";
 
 const router = Router();
-const svc = new ProvinceService(); // Instanciación del
-
-router.get('', async (req, res) => {
-    let respuesta;
-    const returnArray = await svc.getAllAsync();
-    if (returnArray != null){
-    respuesta = res.status(200).json(returnArray);
-    } else {
-    respuesta = res.status(500).send(`Error interno.`);
-    }
-    return respuesta;
-});
 
 
 let provincias = [];
@@ -31,80 +19,84 @@ provincias.push(new Province(9, "Jujuy", "Provincia de Jujuy", -24.1858, -65.299
 
 let cantId = provincias.length;
 
-//1 TERMINADO
-router.get("/api/province", (req, res) => {
-    res.status(200).send(provincias);
-});
 
-//2 TERMINADO
-router.get("/api/province/:id", (req, res) => {
-    let id = req.params.id;
-    if(validacionesHelper.getIntegerOrDefault(id, -1) != -1) {
-        let i = provincias.findIndex(p => p.id == id);
-        if(i != -1) return res.status(200).send(provincias[i]);
-        else return res.status(400).send("No se encontró la provincia.");
-    }else return res.status(400).send("Los parametros no son validos.");
-});
+const ProvinceReouter = () =>
+{
+    //1 TERMINADO
+    router.get("/api/province", (req, res) => {
+        res.status(200).send(provincias);
+    });
+
+    //2 TERMINADO
+    router.get("/api/province/:id", (req, res) => {
+        let id = req.params.id;
+        if(validacionesHelper.getIntegerOrDefault(id, -1) != -1) {
+            let i = provincias.findIndex(p => p.id == id);
+            if(i != -1) return res.status(200).send(provincias[i]);
+            else return res.status(400).send("No se encontró la provincia.");
+        }else return res.status(400).send("Los parametros no son validos.");
+    });
 
 
-//3 TERMINADO
-router.post("/api/province", (req, res) => {
-    let name = req.query.name;
-    let fullName = req.query.fullName;
-    let latitude = req.query.latitude;
-    let longitude = req.query.longitude;
-    let displayOrder = req.query.displayOrder;
+    //3 TERMINADO
+    router.post("/api/province", (req, res) => {
+        let name = req.query.name;
+        let fullName = req.query.fullName;
+        let latitude = req.query.latitude;
+        let longitude = req.query.longitude;
+        let displayOrder = req.query.displayOrder;
 
-    if(validacionesHelper.getIntegerOrDefault(latitude, NaN) != NaN && validacionesHelper.getIntegerOrDefault(longitude, NaN) != NaN
-        && validacionesHelper.getStringOrDefault(name, null) != null && validacionesHelper.getStringOrDefault(fullName, null) != null){
-            cantId++;
-            if(validacionesHelper.getStringOrDefault(displayOrder,null) != null && isNaN(validacionesHelper.getIntegerOrDefault(displayOrder, NaN))){
-                displayOrder = null;
+        if(validacionesHelper.getIntegerOrDefault(latitude, NaN) != NaN && validacionesHelper.getIntegerOrDefault(longitude, NaN) != NaN
+            && validacionesHelper.getStringOrDefault(name, null) != null && validacionesHelper.getStringOrDefault(fullName, null) != null){
+                cantId++;
+                if(validacionesHelper.getStringOrDefault(displayOrder,null) != null && isNaN(validacionesHelper.getIntegerOrDefault(displayOrder, NaN))){
+                    displayOrder = null;
+                }
+                provincias.push(new Province(cantId, name, fullName, latitude, longitude, displayOrder));
+                return res.status(201).send('Provincia creada satisfactoriamente.');
             }
-            provincias.push(new Province(cantId, name, fullName, latitude, longitude, displayOrder));
-            return res.status(201).send('Provincia creada satisfactoriamente.');
+        else{
+            return res.status(400).send("Todos los parametros deben ser validos.");
         }
-    else{
-        return res.status(400).send("Todos los parametros deben ser validos.");
-    }
-});
+    });
 
-//4 TERMINADO
-router.put("/api/province", (req, res) => {
-    let id = req.query.id;
-    let name = req.query.name;
-    let fullName = req.query.fullName;
-    let latitude = req.query.latitude;
-    let longitude = req.query.longitude;
-    let displayOrder = req.query.displayOrder;
+    //4 TERMINADO
+    router.put("/api/province", (req, res) => {
+        let id = req.query.id;
+        let name = req.query.name;
+        let fullName = req.query.fullName;
+        let latitude = req.query.latitude;
+        let longitude = req.query.longitude;
+        let displayOrder = req.query.displayOrder;
 
-    if(validacionesHelper.getIntegerOrDefault(id, -1) != -1) {
-        let i = provincias.findIndex(p => p.id == id);
-        if(i != -1){
-            if(validacionesHelper.getStringOrDefault(name, null) != null && name.length >= 3) provincias[i].name = name;
-            if(validacionesHelper.getStringOrDefault(fullName, null) != null && fullName.length >= 3) provincias[i].fullName = fullName;
-            if(validacionesHelper.getIntegerOrDefault(latitude, NaN) != NaN && validacionesHelper.getStringOrDefault(latitude, null) != null) provincias[i].latitude = latitude;
-            if(validacionesHelper.getIntegerOrDefault(longitude, NaN) != NaN && validacionesHelper.getStringOrDefault(longitude, null) != null) provincias[i].longitude = latitude;
-            if(validacionesHelper.getIntegerOrDefault(longitude, NaN) != NaN && validacionesHelper.getStringOrDefault(longitude, null) != null) 
-            provincias[i].displayOrder = displayOrder;
+        if(validacionesHelper.getIntegerOrDefault(id, -1) != -1) {
+            let i = provincias.findIndex(p => p.id == id);
+            if(i != -1){
+                if(validacionesHelper.getStringOrDefault(name, null) != null && name.length >= 3) provincias[i].name = name;
+                if(validacionesHelper.getStringOrDefault(fullName, null) != null && fullName.length >= 3) provincias[i].fullName = fullName;
+                if(validacionesHelper.getIntegerOrDefault(latitude, NaN) != NaN && validacionesHelper.getStringOrDefault(latitude, null) != null) provincias[i].latitude = latitude;
+                if(validacionesHelper.getIntegerOrDefault(longitude, NaN) != NaN && validacionesHelper.getStringOrDefault(longitude, null) != null) provincias[i].longitude = latitude;
+                if(validacionesHelper.getIntegerOrDefault(longitude, NaN) != NaN && validacionesHelper.getStringOrDefault(longitude, null) != null) 
+                provincias[i].displayOrder = displayOrder;
 
-            return res.status(201).send("Provincia actualizada satisfactoriamente.");
-        }
-        else return res.status(404).send("No existe provincia con ese id.");
-    }else return res.status(400).send("Todos los parametros deben ser validos.");
-});
+                return res.status(201).send("Provincia actualizada satisfactoriamente.");
+            }
+            else return res.status(404).send("No existe provincia con ese id.");
+        }else return res.status(400).send("Todos los parametros deben ser validos.");
+    });
 
-//5 TERMINADO
-router.delete("/api/province/:id", (req, res) => {
-    let id = req.params.id;
-    if(validacionesHelper.getIntegerOrDefault(id, -1) != -1) {
-        let i = provincias.findIndex(p => p.id == id);
-        if(i != -1){
-            provincias.splice(i,1);
-            return res.status(200).send("Provincia eliminada satisfactoriamente.");
-        }
-        else return res.status(400).send("No se encontró la provincia.");
-    }else return res.status(400).send("Los parametros no son validos.");
-});
+    //5 TERMINADO
+    router.delete("/api/province/:id", (req, res) => {
+        let id = req.params.id;
+        if(validacionesHelper.getIntegerOrDefault(id, -1) != -1) {
+            let i = provincias.findIndex(p => p.id == id);
+            if(i != -1){
+                provincias.splice(i,1);
+                return res.status(200).send("Provincia eliminada satisfactoriamente.");
+            }
+            else return res.status(400).send("No se encontró la provincia.");
+        }else return res.status(400).send("Los parametros no son validos.");
+    });
+}
 
-export { router };
+export default ProvinceReouter;
