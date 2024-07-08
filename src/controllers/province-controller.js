@@ -1,99 +1,56 @@
-import {Router} from 'express';
-// import ProvinceService from './../services/province-service.js'
-import Province from "../entities/province.js";
-import validacionesHelper from "../helpers/validaciones-helper.js";
-
+import { Router } from "express";
+import ProvinceService from "../services/province-service.js"
 const router = Router();
+const svc = new ProvinceService();
+
+// 3 Busqueda de un evento
+router.get("", async (req, res) => {
+    const returnArray = await svc.getAllAsync();
+    res.setHeader('Content-Type', 'application/json').status(200).json(returnArray);
+})
+
+// 4 Detalle de un evento
+router.get("/:id", async (req, res) => {
+    const id = req.params.id;
+    const returnArray = await svc.getByIdAsync(id);
+    if(returnArray.length != 0){
+        res.setHeader('Content-Type', 'application/json').status(200).json(returnArray);
+    }else{
+        res.setHeader('Content-Type', 'text/plain').status(404).send("No se encontró nada. Revisá las KEY o VALUES");
+    }
+})
 
 
-let provincias = [];
-provincias.push(new Province(1, "Buenos Aires", "Buenos Aires", -34.6037, -58.3816, 1));
-provincias.push(new Province(2, "Catamarca", "Provincia de Catamarca", -28.4696, -65.7852, 2));
-provincias.push(new Province(3, "Chaco", "Provincia del Chaco", -27.4512, -58.9866, 3));
-provincias.push(new Province(4, "Chubut", "Provincia del Chubut", -43.2932, -65.1116, 4));
-provincias.push(new Province(5, "Córdoba", "Provincia de Córdoba", -31.4201, -64.1888, 5));
-provincias.push(new Province(6, "Corrientes", "Provincia de Corrientes", -27.4692, -58.8309, 6));
-provincias.push(new Province(7, "Entre Ríos", "Provincia de Entre Ríos", -32.0575, -59.2015, 7));
-provincias.push(new Province(8, "Formosa", "Provincia de Formosa", -26.1852, -58.1751, 8));
-provincias.push(new Province(9, "Jujuy", "Provincia de Jujuy", -24.1858, -65.2995, 9));
+// Provincia especifica
+router.post("", async (req, res) => { 
+    const response = {
+        name: null,
+        full_name: null,
+        latitude: null,
+        longitude: null,
+        display_order: null
+    }
 
-let cantId = provincias.length;
+    for (const [key, value] of Object.entries(req.query)) {
+        if(response[`${key}`] !== undefined) response[`${key}`] = value;
+    }
+    res.status(200).send("llegue");
+})
 
+router.put("", async (req, res) => {
 
-    //1 TERMINADO
-    router.get("", (req, res) => {
-        res.status(200).send(provincias);
-    });
-
-    //2 TERMINADO
-    router.get(":id", (req, res) => {
-        let id = req.params.id;
-        if(validacionesHelper.getIntegerOrDefault(id, -1) != -1) {
-            let i = provincias.findIndex(p => p.id == id);
-            if(i != -1) { return res.status(200).send(provincias[i]); }
-            else {return res.status(400).send("No se encontró la provincia.");}
-        }else {return res.status(400).send("Los parametros no son validos.");}
-    });
+})
 
 
-    //3 TERMINADO
-    router.post("", (req, res) => {
-        let name = req.query.name;
-        let fullName = req.query.fullName;
-        let latitude = req.query.latitude;
-        let longitude = req.query.longitude;
-        let displayOrder = req.query.displayOrder;
+router.delete("/:id", async (req, res) => {
+    const id = req.params.id;
+    const returnMsg = await svc.deleteByIdAsync(id);
+    if(returnMsg == ""){
+        res.setHeader('Content-Type', 'application/json').status(200).send(`Provinicia eliminada con exito!`);
+    }else{
+        res.setHeader('Content-Type', 'text/plain').status(404).send(`${returnMsg}`);
+    }
+})
 
-        if(validacionesHelper.getIntegerOrDefault(latitude, NaN) != NaN && validacionesHelper.getIntegerOrDefault(longitude, NaN) != NaN
-            && validacionesHelper.getStringOrDefault(name, null) != null && validacionesHelper.getStringOrDefault(fullName, null) != null){
-                cantId++;
-                if(validacionesHelper.getStringOrDefault(displayOrder,null) != null && isNaN(validacionesHelper.getIntegerOrDefault(displayOrder, NaN))){
-                    displayOrder = null;
-                }
-                provincias.push(new Province(cantId, name, fullName, latitude, longitude, displayOrder));
-                return res.status(201).send('Provincia creada satisfactoriamente.');
-            }
-        else{
-            return res.status(400).send("Todos los parametros deben ser validos.");
-        }
-    });
-
-    //4 TERMINADO
-    router.put("", (req, res) => {
-        let id = req.query.id;
-        let name = req.query.name;
-        let fullName = req.query.fullName;
-        let latitude = req.query.latitude;
-        let longitude = req.query.longitude;
-        let displayOrder = req.query.displayOrder;
-
-        if(validacionesHelper.getIntegerOrDefault(id, -1) != -1) {
-            let i = provincias.findIndex(p => p.id == id);
-            if(i != -1){
-                if(validacionesHelper.getStringOrDefault(name, null) != null && name.length >= 3) provincias[i].name = name;
-                if(validacionesHelper.getStringOrDefault(fullName, null) != null && fullName.length >= 3) provincias[i].fullName = fullName;
-                if(validacionesHelper.getIntegerOrDefault(latitude, NaN) != NaN && validacionesHelper.getStringOrDefault(latitude, null) != null) provincias[i].latitude = latitude;
-                if(validacionesHelper.getIntegerOrDefault(longitude, NaN) != NaN && validacionesHelper.getStringOrDefault(longitude, null) != null) provincias[i].longitude = latitude;
-                if(validacionesHelper.getIntegerOrDefault(longitude, NaN) != NaN && validacionesHelper.getStringOrDefault(longitude, null) != null) 
-                provincias[i].displayOrder = displayOrder;
-
-                return res.status(201).send("Provincia actualizada satisfactoriamente.");
-            }
-            else return res.status(404).send("No existe provincia con ese id.");
-        }else return res.status(400).send("Todos los parametros deben ser validos.");
-    });
-
-    //5 TERMINADO
-    router.delete(":id", (req, res) => {
-        let id = req.params.id;
-        if(validacionesHelper.getIntegerOrDefault(id, -1) != -1) {
-            let i = provincias.findIndex(p => p.id == id);
-            if(i != -1){
-                provincias.splice(i,1);
-                return res.status(200).send("Provincia eliminada satisfactoriamente.");
-            }
-            else return res.status(400).send("No se encontró la provincia.");
-        }else return res.status(400).send("Los parametros no son validos.");
-    });
 
 export default router;

@@ -1,5 +1,4 @@
-class ValidacionesHelper {
-
+export default class ValidacionesHelper {
     getIntegerOrDefault = (value, defaultValue) => {
         if (isNaN(parseInt(value,10)) || parseInt(value,10) === undefined || parseInt(value,10) === null){
             return defaultValue;
@@ -12,5 +11,3 @@ class ValidacionesHelper {
         } else return value;
     };
 }
-    // Exporto todo lo que yo quiero exponer del módulo:
-    export default new ValidacionesHelper();
