@@ -24,4 +24,22 @@ export default class ProvinceService {
         }
         return response;
     }
+
+    updateByIdAsync = async(data) => {
+        const repo = new ProvinceRepository();
+        const checkExistance = await repo.getById(data[data.length-1]);
+        let response;
+        if(checkExistance.length !== 0){
+            response = await repo.updateByIdAsync(data);
+        }else{
+            response = "BAD REQUEST: ID inexistente";
+        }
+        return response;
+    }
+
+    createAsync = async(name, fName, latitude, longitude, dOrder) => {
+        const repo = new ProvinceRepository();
+        const lReturnArray = await repo.insertAsync(name, fName, latitude, longitude, dOrder);
+        return lReturnArray;
+    }
 }

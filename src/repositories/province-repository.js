@@ -8,7 +8,8 @@ export default class ProvinceRepository {
         const client = new Client(DBConfig);
         try {
             await client.connect();
-            let sql = `SELECT * FROM Provinces PP`;
+            let sql = `SELECT * FROM Provinces PP
+                ORDER BY id ASC`;
             const result = await client.query(sql);
             await client.end();
             returnArray = result.rows;
@@ -40,8 +41,8 @@ export default class ProvinceRepository {
         try {
             await client.connect();
             let sql = `INSERT INTO public.provinces(
-                name, full_name, latitude, longitude, display_order)
-                VALUES (${name}, ${fName}, ${latitude}, ${longitude}, ${dOrder});
+                name, full_name, latitude, longitude, display_order, id)
+                VALUES ('${name}', '${fName}', ${latitude}, ${longitude}, ${dOrder}, (SELECT MAX(id)+1 FROM public.provinces));
                 `;
             const result = await client.query(sql);
             await client.end();
@@ -60,11 +61,12 @@ export default class ProvinceRepository {
             await client.connect();
             let querys = "";
             for (let i = 0; i < data.length - 1; i++) {
-                querys += (i != data.length - 1) ? data[i] + ", " : data[i];
+                querys += (i != data.length - 2) ? data[i] + ", " : data[i];
             }
-            let sql = `UPDATE public.provinces
+
+            let sql = `UPDATE Provinces
                 SET ${querys}
-                WHERE ${data[data.length - 1]}`;
+                WHERE id=${parseInt(data[data.length - 1])};`;
             const result = await client.query(sql);
             await client.end();
             returnArray = result.rows;
